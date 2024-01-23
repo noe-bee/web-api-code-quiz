@@ -1,33 +1,34 @@
 //Grab elements
-var startQuizContainer = document.querySelector('#quiz-beginning-container');
-var startQuizButton = document.querySelector('#start-button') ;
+var startQuizContainerEl = document.querySelector('#quiz-beginning-container');
+var startQuizButtonEl = document.querySelector('#start-button') ;
 
 
-var quizContainer = document.querySelector('#quiz-container');
-var questionContainer = document.querySelector('#question-container');
-var quizQuestions = document.querySelector('#quiz-questions');
-var options = document.querySelector('#options');
+var quizContainerEl = document.querySelector('#quiz-container');
+var questionContainerEl = document.querySelector('#question-container');
+var quizQuestionEl = document.querySelector('#quiz-question');
+var optionsEl = document.querySelector('#options');
 
 
-var endQuizContainer = document.querySelector('#quiz-end-container');
-// var finalScoreNum = document.querySelector('#final-score');
+var endQuizContainerEl = document.querySelector('#quiz-end-container');
+var finalScoreNumEL = document.querySelector('#final-score');
 // var initialsSubmit = document.querySelector('#initials-submit'); eventListener?
 
-// var highScoresContainer = document.querySelector('#quiz-hs');
+var highScoresContainerEL = document.querySelector('#quiz-hs-container');
 //high scores list ...
-// var hsBackButton = document.querySelector('#back-button'); event listener
-// var clearHsButton = document.querySelector('#clear-hs'); event listener
+ var hsBackButton = document.querySelector('#back-button'); // event listener
+var clearHsButton = document.querySelector('#clear-hs');// event listener
 
-// var quizTimer = document.querySelector('#seconds-left');
-// var viewHighscoreButton = document.querySelector('#view-highscores') ; //beggining of page
-
-
+var timerElementEL = document.querySelector('#seconds-left');
+var viewHighscoreButton = document.querySelector('#view-highscores') ; //beggining of page
+var optionAButton = document.querySelector('#list-choice-a');
+var optionBButton = document.querySelector('#list-choice-b');
+var optionCButton = document.querySelector('#list-choice-c');
+var optionDButton = document.querySelector('#list-choice-d');
 
 // Quiz Questions array
-var quizQuestions = [
-    {   //key   :  value
+var javaQuestions = [
+    {   
         question: "Commonly used data types DO NOT include:", 
-        //key  : value
         answers: {
         //key: value
             a: "strings",
@@ -36,7 +37,7 @@ var quizQuestions = [
             d: "numbers"
         },
         //key        : value
-        correctAnswer: "c"
+        correctAnswer: "alerts"
     },
     {
         question: "The condition in an if/else statement is enclosed within ___.",
@@ -46,7 +47,7 @@ var quizQuestions = [
             c: "parenthesis",
             d: "square brackets"
         },
-        correctAnswer: "b"
+        correctAnswer: "curly brackets"
     },
     {
         question: "Arrays in JavaScript can be used to store ___.",
@@ -56,7 +57,7 @@ var quizQuestions = [
             c: "booleans",
             d: "all of the above"
         },
-        correctAnswer: "d"
+        correctAnswer: "all of the above"
     },
     {
         question: "String values must be encolsed within ___ when being assigned to variables.",
@@ -66,7 +67,7 @@ var quizQuestions = [
             c: "quotes",
             d: "parenthesis"
         },
-        correctAnswer: "c"
+        correctAnswer: "quotes"
     },
     {
         question: "A very useful tool used during development and debugging for printing content to the debugger is:",
@@ -76,29 +77,95 @@ var quizQuestions = [
             c: "for loops",
             d: "console.log"
         },
-        correctAnswer: "d"
+        correctAnswer: "console.log"
     },
 ]
 
-//beginning of functions
 
-startQuizButton.addEventListener("click",)
+var timer;
+var timeLeft;
+let questionNum = 0;
+
+startQuizButtonEl.addEventListener("click", startQuiz)
+//button eventListener
+
+function startQuiz(){
+    timeLeft = 75;
+    startQuizButtonEl.disabled = true; 
+    setTimer();
+    showQuestion();
+}
+
+function setTimer() {
+	timer = setInterval(function() {
+	timeLeft--;
+	timerElementEL.textContent = timeLeft; //updates what is shown in timerElement on screen
+		if (timeLeft < 0) {
+			clearInterval(timer); //this is to stop timer
+		}
+	}, 1000);
+}
 
 
+function showQuestion(){ 
+    if (questionNum < javaQuestions.length){
+        startQuizContainerEl.classList.add("hidden");
+        quizContainerEl.classList.remove("hidden");
+        let currentQuestion = javaQuestions[questionNum].question
+        //show actual question
+        quizQuestionEl.textContent = currentQuestion;
+        //show li element
+            optionAButton.textContent = javaQuestions[questionNum].answers.a;
+            optionBButton.textContent = javaQuestions[questionNum].answers.b;
+            optionCButton.textContent = javaQuestions[questionNum].answers.c;
+            optionDButton.textContent = javaQuestions[questionNum].answers.d;
+    }
+    else {
+        quizContainerEl.classList.add("hidden");
+        endQuizContainerEl.classList.remove("hidden");
+        clearInterval(timer); //stops timer
+        finalScoreNumEL.textContent = timeLeft;
 
-generateQuiz(startQuizContainer, quizQuestions, quizContainer, endQuizContainer);
+    }
+}
 
-function generateQuiz (quizContainer, quizQuestions, endQuizContainer){
-    function displayQuiz(){
+function checkAnswer (event){
+    event.preventDefault(); //to preven button default
+    let targetText = event.target.innerHTML //text within the button
+    let correctAnswer = javaQuestions[questionNum].correctAnswer //drills down to correct answer
 
+if (targetText === correctAnswer){
+        alert("correct!")
+        questionNum = questionNum + 1;
+        showQuestion();
+}
+else {
+    timeLeft = timeLeft - 10;
+    questionNum = questionNum + 1;
+    alert("incorrect");
+    showQuestion();
+}
 
-    }    
+        
+}
 
-
-
-
-
-
-
+function showHighScores() {
+    startQuizContainerEl.classList.add("hidden");
+    highScoresContainerEL.classList.remove("hidden");
 
 }
+viewHighscoreButton.addEventListener('click', showHighScores);
+
+
+function goBack(){
+    highScoresContainerEL.classList.add("hidden");
+    startQuizContainerEl.classList.remove("hidden");     
+}
+hsBackButton.addEventListener('click', goBack)
+
+
+// function clearHs(){
+
+// }
+
+// clearHsButton.addEventListener('click', clearHs)

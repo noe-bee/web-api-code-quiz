@@ -19,8 +19,8 @@
     </header> 
 
     <main>
-      <section>
-      <div id = "quiz-beginning-container">
+      <!-- <section> -->
+      <div id = "quiz-beginning-container" >
         <h2>This is a JavaScript code quiz. You will have 75 seconds to complete
         the quiz. However, for every question answered wrong, the timer will deplete 15 seconds. Good luck!
         </h2>
@@ -29,9 +29,14 @@
 
       <!-- quizdiv -->
       <div id = "quiz-container" class = "hidden"> 
-        <div id = "question-container"></div>
-        <div id="quiz-questions"></div>
-        <ul id = "options"></ul>
+        <div id="quiz-question"></div>
+        <ul id = "options">
+          <button id = "list-choice-a" onclick="checkAnswer(event)"></button>
+          <button id = "list-choice-b" onclick="checkAnswer(event)"></button>
+          <button id = "list-choice-c" onclick="checkAnswer(event)"></button>
+          <button id = "list-choice-d" onclick="checkAnswer(event)"></button>
+
+        </ul>
       </div>
 
       <div id = "quiz-end-container" class = "hidden">
@@ -42,17 +47,19 @@
         <input type="text" id="initials" value=""><br><br>
         <input id = "initials-submit" type="submit" value="Submit">
         </form>
-        <!-- once submitted, moves on to highscores div -->
       </div>
 
-      <div id = "quiz-hs-container" class = "hidden">
+      <div id = "quiz-hs-container" class= "hidden" >
         <h2>Highscores:</h2>
-        <!-- need to append list of highscores? -->
+        <!-- need to append list of highscores?  -->
+        <ul id = "highscores-scores">
+
+        </ul>
         <button id = "back-button" type="button">Go Back</button> 
         <button id = "clear-hs" type="button">Clear Highscores</button>
       </div>
 
-      </section>  
+      <!-- </section>   -->
     </main>
     <script src="./assets/script.js"></script>    
   </body>
