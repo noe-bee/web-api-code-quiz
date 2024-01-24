@@ -11,12 +11,12 @@ var optionsEl = document.querySelector('#options');
 
 var endQuizContainerEl = document.querySelector('#quiz-end-container');
 var finalScoreNumEL = document.querySelector('#final-score');
-// var initialsSubmit = document.querySelector('#initials-submit'); eventListener?
+var initialsSubmit = document.querySelector('#initials-submit');
+var initialsInput = document.querySelector('#initials')
 
 var highScoresContainerEL = document.querySelector('#quiz-hs-container');
-//high scores list ...
- var hsBackButton = document.querySelector('#back-button'); // event listener
-var clearHsButton = document.querySelector('#clear-hs');// event listener
+var highScoreLiEl = document.querySelector("#highscore-score")
+var hsBackButton = document.querySelector('#back-button'); // add event listener
 
 var timerElementEL = document.querySelector('#seconds-left');
 var viewHighscoreButton = document.querySelector('#view-highscores') ; //beggining of page
@@ -24,6 +24,7 @@ var optionAButton = document.querySelector('#list-choice-a');
 var optionBButton = document.querySelector('#list-choice-b');
 var optionCButton = document.querySelector('#list-choice-c');
 var optionDButton = document.querySelector('#list-choice-d');
+
 
 // Quiz Questions array
 var javaQuestions = [
@@ -85,6 +86,7 @@ var javaQuestions = [
 var timer;
 var timeLeft;
 let questionNum = 0;
+var scoreArray = [];
 
 startQuizButtonEl.addEventListener("click", startQuiz)
 //button eventListener
@@ -125,6 +127,7 @@ function showQuestion(){
         endQuizContainerEl.classList.remove("hidden");
         clearInterval(timer); //stops timer
         finalScoreNumEL.textContent = timeLeft;
+        
 
     }
 }
@@ -134,38 +137,48 @@ function checkAnswer (event){
     let targetText = event.target.innerHTML //text within the button
     let correctAnswer = javaQuestions[questionNum].correctAnswer //drills down to correct answer
 
-if (targetText === correctAnswer){
+    if (targetText === correctAnswer){
         alert("correct!")
         questionNum = questionNum + 1;
         showQuestion();
-}
-else {
-    timeLeft = timeLeft - 10;
-    questionNum = questionNum + 1;
-    alert("incorrect");
-    showQuestion();
-}
-
-        
+    }
+    else {
+        timeLeft = timeLeft - 10;
+        questionNum = questionNum + 1;
+        alert("incorrect");
+        showQuestion();
+    }      
 }
 
-function showHighScores() {
+
+function showHighScoresEl() {
+    endQuizContainerEl.classList.add("hidden");
     startQuizContainerEl.classList.add("hidden");
-    highScoresContainerEL.classList.remove("hidden");
-
+    highScoresContainerEL.classList.remove("hidden")
 }
-viewHighscoreButton.addEventListener('click', showHighScores);
+viewHighscoreButton.addEventListener('click', showHighScoresEl);
 
 
 function goBack(){
     highScoresContainerEL.classList.add("hidden");
     startQuizContainerEl.classList.remove("hidden");     
 }
+
 hsBackButton.addEventListener('click', goBack)
 
 
-// function clearHs(){
+function addUserScore(event){
+    event.preventDefault();
+    endQuizContainerEl.classList.add("hidden");
+    highScoresContainerEL.classList.remove("hidden");
+    var scoreObject = {
+        initial: initialsInput.value,
+        score: timeLeft
+    }
+    scoreArray.push(scoreObject);
+    var scoreJSON = JSON.stringify(scoreArray);
+    localStorage.setItem('highScores', scoreJSON); 
+    highScoreLiEl.textContent = scoreJSON
+}
 
-// }
-
-// clearHsButton.addEventListener('click', clearHs)
+initialsSubmit.addEventListener('click', addUserScore)
